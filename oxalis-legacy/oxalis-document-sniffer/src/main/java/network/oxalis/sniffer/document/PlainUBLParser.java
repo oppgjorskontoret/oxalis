@@ -76,8 +76,9 @@ public class PlainUBLParser {
     public String retriveValueForXpath(String s) {
         try {
             String value = xPath.evaluate(s, document);
-            if (value == null) {
-                throw new IllegalStateException("Unable to find value for Xpath expr " + s);
+            if (value == null || value.isEmpty()) {
+                if (s.contains("//cbc:UBLVersionID")) value = "2.1";
+                else throw new IllegalStateException("Unable to find value for Xpath expr " + s);
             }
             return value.trim();
         } catch (XPathExpressionException e) {

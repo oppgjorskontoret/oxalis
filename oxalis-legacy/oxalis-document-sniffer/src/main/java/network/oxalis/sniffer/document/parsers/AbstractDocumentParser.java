@@ -28,6 +28,8 @@ import network.oxalis.sniffer.identifier.SchemeId;
 import network.oxalis.vefa.peppol.common.model.ParticipantIdentifier;
 import org.w3c.dom.Element;
 
+import java.util.regex.Pattern;
+
 /**
  * Abstract implementation based on the PlainUBLParser to retrieve information from PEPPOL documents.
  * Contains common functionality to be used as a base for decoding types.
@@ -37,6 +39,8 @@ import org.w3c.dom.Element;
 public abstract class AbstractDocumentParser implements PEPPOLDocumentParser {
 
     protected PlainUBLParser parser;
+
+    private static Pattern pNumeric = Pattern.compile("-?\\d+(\\.\\d+)?");
 
     public AbstractDocumentParser(PlainUBLParser parser) {
         this.parser = parser;
@@ -78,7 +82,9 @@ public abstract class AbstractDocumentParser implements PEPPOLDocumentParser {
             }
         } else {
             // try to add the given icd prefix to the participant id
-            companyId = String.format("%s:%s", SchemeId.parse(schemeIdTextValue).getCode(), companyId);
+            if(isNumeric(schemeIdTextValue)) companyId = String.format("%s:%s", SchemeId.fromISO6523(schemeIdTextValue).getCode(), companyId);
+            else companyId = String.format("%s:%s", SchemeId.parse(schemeIdTextValue).getCode(), companyId);
+
             if (!ParticipantId.isValidParticipantIdentifierPattern(companyId)) {
                 throw new IllegalStateException(String.format(
                         "ParticipantId syntax at '%s' evaluates to '%s' and is invalid", xPathExpr, companyId));
@@ -86,6 +92,13 @@ public abstract class AbstractDocumentParser implements PEPPOLDocumentParser {
             ret = new ParticipantId(companyId);
         }
         return ret.toVefa();
+    }
+
+    private static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        return pNumeric.matcher(strNum).matches();
     }
 
 }

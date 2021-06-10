@@ -30,6 +30,8 @@ import network.oxalis.api.util.Type;
 import network.oxalis.sniffer.PeppolStandardBusinessHeader;
 import network.oxalis.sniffer.document.parsers.PEPPOLDocumentParser;
 import network.oxalis.vefa.peppol.common.model.Header;
+import network.oxalis.vefa.peppol.sbdh.SbdReader;
+import network.oxalis.vefa.peppol.sbdh.lang.SbdhException;
 import org.w3c.dom.Document;
 
 import javax.xml.XMLConstants;
@@ -66,9 +68,7 @@ public class NoSbdhParser implements ContentDetector {
     }
 
     public NoSbdhParser() {
-        log.warn("You have enabled support for automatic detection of content. " +
-                "This functionality will be turned of by default in version 4.1 and removed in version 4.2/5.0. " +
-                "Use configuration \"oxalis.transformer.detector = noop\" to disable it today.");
+        log.warn("Custom {} is active", getClass().getSimpleName());
     }
 
     /**
@@ -139,6 +139,14 @@ public class NoSbdhParser implements ContentDetector {
             return sbdh;
         } catch (Exception e) {
             throw new OxalisContentException("Unable to parseOld document " + e.getMessage(), e);
+        }
+    }
+
+    public PeppolStandardBusinessHeader documentParse(InputStream inputStream) throws OxalisContentException {
+        try {
+            return new PeppolStandardBusinessHeader(SbdReader.newInstance(inputStream).getHeader());
+        } catch (SbdhException e) {
+            throw new OxalisContentException(e.getMessage());
         }
     }
 }
