@@ -64,6 +64,15 @@
             <groupId>network.oxalis</groupId>
             <artifactId>oxalis-extension-testbed</artifactId>
         </dependency>
+        <dependency>
+            <groupId>network.oxalis</groupId>
+            <artifactId>oxalis-statistics</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.16</version>
+        </dependency>
 
         <!-- Jetty -->
         <dependency>
