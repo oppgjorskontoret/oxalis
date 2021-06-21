@@ -34,8 +34,6 @@ ENV MODE server
 
 FROM oxalis-base as oxalis
 
-VOLUME /oxalis/conf /oxalis/ext /oxalis/inbound /oxalis/outbound /oxalis/plugin
-
 EXPOSE 8080
 
 WORKDIR /oxalis
