@@ -66,7 +66,6 @@ public class PeppolStandardBusinessHeader {
      */
     private C1CountryIdentifier c1CountryIdentifier;
 
-
     /**
      * Represents the unique identity of the message envelope. It is not the same as the ID of the
      * business message (such as the Invoice number). Nor is it the same as the transmission Message ID

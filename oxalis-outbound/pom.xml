@@ -30,6 +30,15 @@
         <version>6.6.0</version>
     </parent>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>oppgjorskontoret/oxalis Maven Packages</name>
+            <url>https://maven.pkg.github.com/oppgjorskontoret/oxalis</url>
+        </repository>
+    </distributionManagement>
+
+
     <artifactId>oxalis-outbound</artifactId>
     <packaging>jar</packaging>
 

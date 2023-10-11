@@ -30,6 +30,7 @@ import network.oxalis.api.util.Type;
 import network.oxalis.sniffer.PeppolStandardBusinessHeader;
 import network.oxalis.sniffer.document.parsers.PEPPOLDocumentParser;
 import network.oxalis.vefa.peppol.common.model.Header;
+import network.oxalis.vefa.peppol.common.model.C1CountryIdentifier;
 import network.oxalis.vefa.peppol.sbdh.SbdReader;
 import network.oxalis.vefa.peppol.sbdh.lang.SbdhException;
 import org.w3c.dom.Document;
@@ -130,6 +131,20 @@ public class NoSbdhParser implements ContentDetector {
                     }
                     try {
                         sbdh.setRecipientId(documentParser.getReceiver());
+                    } catch (Exception e) {
+                        // Just continue
+                    }
+                    try {
+                        if (documentParser.getSender().getIdentifier().startsWith("0192")) {
+                            sbdh.setC1CountryIdentifier(C1CountryIdentifier.of("NO"));
+                        } else if (documentParser.getSender().getIdentifier().startsWith("0007")) {
+                            sbdh.setC1CountryIdentifier(C1CountryIdentifier.of("SE"));
+                        } else if (documentParser.getSender().getIdentifier().startsWith("0088")) {
+                            String supplierCountry = headerParser.retriveValueForXpath(
+                                "//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode"
+                            );
+                            sbdh.setC1CountryIdentifier(C1CountryIdentifier.of(supplierCountry));
+                        }
                     } catch (Exception e) {
                         // Just continue
                     }
