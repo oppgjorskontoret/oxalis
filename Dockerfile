@@ -26,7 +26,7 @@ RUN cd $MAVEN_HOME \
  && find /oxalis -name .gitkeep -exec rm -rf '{}' \;
 
 
-FROM openjdk:11.0.30-jre as oxalis-base
+FROM eclipse-temurin:11.0.30_7-jre as oxalis-base
 
 COPY --from=mvn /oxalis /oxalis
 
